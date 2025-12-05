@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { fetchPosts } from "../api/posts";
+import { fetchPosts, fetchFeed, getUserInfo, followId, unfollowId } from "../api/posts";
 
 import avatarImg from "../assets/avatar.png";
 import homeImg from "../assets/home.png";
@@ -26,27 +26,38 @@ export default function PostsScreen({ route, navigation }) {
   const [error, setError] = useState(null);
   const [tab, setTab] = useState("foru"); 
 
-  const loadPosts = async (showLoading = true) => {
-    if (!token) return;
+const loadPosts = async (showLoading = true) => {
+  if (!token) return;
 
-    if (showLoading) setLoading(true);
-    setError(null);
+  if (showLoading) setLoading(true);
+  setError(null);
 
-    try {
-      const data = await fetchPosts(token, 1, 10);
-      setPosts(data);
-    } catch (err) {
-      setError(err.message || "No se pudieron cargar los posts.");
-    } finally {
-      if (showLoading) setLoading(false);
-      setRefreshing(false);
+  try {
+    let data;
+
+    if (tab === "foru") {
+      data = await fetchPosts(token, 1, 10);
+    } else if (tab === "urpals") {
+      data = await fetchFeed(token, 1, 10);
     }
-  };
+
+    setPosts(data || []);
+  } catch (err) {
+    setError(err.message || "No se pudieron cargar los posts.");
+  } finally {
+    if (showLoading) setLoading(false);
+    setRefreshing(false);
+  }
+};
 
   useEffect(() => {
     loadPosts(true);
   }, [token]);
 
+  useEffect(() => {
+    loadPosts(true);
+  }, [tab]);
+  
   const onRefresh = () => {
     setRefreshing(true);
     loadPosts(false);
@@ -71,8 +82,6 @@ export default function PostsScreen({ route, navigation }) {
 
               {isMine ? (
                 <View style={styles.actionsRow}>
-                  <Text style={styles.actionIcon}>✏️</Text>
-                  <Text style={styles.actionIcon}>🗑️</Text>
                   <View style={styles.badgeFilled}>
                     <Text style={styles.badgeFilledText}>U!</Text>
                   </View>

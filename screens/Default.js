@@ -1,4 +1,6 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity, Image, Alert} from 'react-native';
+import lpImg from "../assets/lp.png";
+
 
 export default function Default({ navigation }) {
   
@@ -14,7 +16,7 @@ export default function Default({ navigation }) {
           LPals!
         </Text>
         <Image 
-          source={{ uri: 'https://reactnative.dev/img/tiny_logo.png'}}
+          source={lpImg}
           style={styles.logo}
         />
       </View>
