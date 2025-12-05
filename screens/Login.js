@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native'; 
 import { useState, useEffect, useRef } from 'react';
-import AuthServices from '../Utils/Auth';
+import AuthServices from '../utils/Auth';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -56,7 +56,10 @@ export default function Login({ navigation }) {
 
       if (!mountedRef.current) return;
 
-      navigation.navigate('Default');
+      navigation.navigate('Posts', {
+        token: userData.token,
+        username: userData.username,
+      });
     } catch (error) {
       console.log('Error en login:', error); 
       if (mountedRef.current) {
@@ -99,12 +102,15 @@ export default function Login({ navigation }) {
       <TouchableOpacity style={styles.signUpButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login!</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ marginTop: 20, alignSelf: 'center' }}>
+        <Text style={{ color: '#72A3FF' }}>Don't have an account? Register here</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // ... (Tus estilos están bien, se mantienen igual)
   signUpButton: {
     backgroundColor: '#92B0E9',
     borderWidth: 2,
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#11111', // Ojo: Hex debe ser 6 digitos (#111111) o 3 (#111), tienes 5.
+    backgroundColor: '#11111',
     padding: 0,
   },
   headerText: {
