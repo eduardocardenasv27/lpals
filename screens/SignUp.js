@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity, Header, TextInput, Alert} from 'react-native';
 import { useState, useEffect, useRef } from 'react'; 
-import AuthServices from '../Utils/Auth'
+import AuthServices from '../utils/Auth'
 
 
 export default function SignUp({ navigation }) {
@@ -51,6 +51,7 @@ export default function SignUp({ navigation }) {
       }); 
       if (!mountedRef.current) return; 
       Alert.alert('Cuenta creada exitosamente');
+      navigation.navigate('Login');
     } catch (err) {
       if (mountedRef.current) {
         Alert.alert(err, 'Error al crear la cuenta');
@@ -113,9 +114,9 @@ export default function SignUp({ navigation }) {
         Sign Up!
         </Text>
       </TouchableOpacity>
-      <Text style={styles.link}>
-      Already a pal? Log-In
-      </Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.link}>Already a pal? Log-In</Text>
+      </TouchableOpacity>
     </View>
   );
 }
